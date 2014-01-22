@@ -274,7 +274,13 @@
     ok(new View().$el.is('p'));
   });
 
-  test("views stopListening", 0, function() {
+  test("views stopListening", function() {
+    if (typeof Backbone.Model === 'undefined'
+        || typeof Backbone.Collection === 'undefined') {
+      ok(true, 'Model or Collection not included, skipping');
+      return;
+    }
+
     var View = Backbone.View.extend({
       initialize: function() {
         this.listenTo(this.model, 'all x', function(){ ok(false); }, this);
