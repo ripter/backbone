@@ -443,17 +443,6 @@
     equal(undefined, e.collection);
   });
 
-  test("fetch", 4, function() {
-    var collection = new Backbone.Collection;
-    collection.url = '/test';
-    collection.fetch();
-    equal(this.syncArgs.method, 'read');
-    equal(this.syncArgs.model, collection);
-    equal(this.syncArgs.options.parse, true);
-
-    collection.fetch({parse: false});
-    equal(this.syncArgs.options.parse, false);
-  });
 
   test("fetch with an error response triggers an error event", 1, function () {
     var collection = new Backbone.Collection();
@@ -462,29 +451,6 @@
     });
     collection.sync = function (method, model, options) { options.error(); };
     collection.fetch();
-  });
-
-  test("ensure fetch only parses once", 1, function() {
-    var collection = new Backbone.Collection;
-    var counter = 0;
-    collection.parse = function(models) {
-      counter++;
-      return models;
-    };
-    collection.url = '/test';
-    collection.fetch();
-    this.syncArgs.options.success();
-    equal(counter, 1);
-  });
-
-  test("create", 4, function() {
-    var collection = new Backbone.Collection;
-    collection.url = '/test';
-    var model = collection.create({label: 'f'}, {wait: true});
-    equal(this.syncArgs.method, 'create');
-    equal(this.syncArgs.model, model);
-    equal(model.get('label'), 'f');
-    equal(model.collection, collection);
   });
 
   test("create with validate:true enforces validation", 3, function() {
@@ -647,20 +613,6 @@
     new Backbone.Collection().add(models);
     equal(models.length, 1);
     ok(attrs === models[0]);
-  });
-
-  test("#714: access `model.collection` in a brand new model.", 2, function() {
-    var collection = new Backbone.Collection;
-    collection.url = '/test';
-    var Model = Backbone.Model.extend({
-      set: function(attrs) {
-        equal(attrs.prop, 'value');
-        equal(this.collection, collection);
-        return this;
-      }
-    });
-    collection.model = Model;
-    collection.create({prop: 'value'});
   });
 
   test("#574, remove its own reference to the .models array.", 2, function() {

@@ -1,8 +1,7 @@
 /*global Backbone, module, test, asyncTest, ok, strictEqual */
 (function() {
 
-  module("Backbone.Collection with Sync", {
-  });
+  module('Backbone.Collection with Sync');
 
   test("#1412 - Trigger 'request' and 'sync' events.", 4, function() {
     var collection = new Backbone.Collection;
@@ -70,6 +69,55 @@
       }
     });
     this.ajaxSettings.success('response');
+  });
+
+  test("fetch", 4, function() {
+    var collection = new Backbone.Collection;
+    collection.url = '/test';
+    collection.fetch();
+    equal(this.syncArgs.method, 'read');
+    equal(this.syncArgs.model, collection);
+    equal(this.syncArgs.options.parse, true);
+
+    collection.fetch({parse: false});
+    equal(this.syncArgs.options.parse, false);
+  });
+
+  test("ensure fetch only parses once", 1, function() {
+    var collection = new Backbone.Collection;
+    var counter = 0;
+    collection.parse = function(models) {
+      counter++;
+      return models;
+    };
+    collection.url = '/test';
+    collection.fetch();
+    this.syncArgs.options.success();
+    equal(counter, 1);
+  });
+
+  test("create", 4, function() {
+    var collection = new Backbone.Collection;
+    collection.url = '/test';
+    var model = collection.create({label: 'f'}, {wait: true});
+    equal(this.syncArgs.method, 'create');
+    equal(this.syncArgs.model, model);
+    equal(model.get('label'), 'f');
+    equal(model.collection, collection);
+  });
+
+  test("#714: access `model.collection` in a brand new model.", 2, function() {
+    var collection = new Backbone.Collection;
+    collection.url = '/test';
+    var Model = Backbone.Model.extend({
+      set: function(attrs) {
+        equal(attrs.prop, 'value');
+        equal(this.collection, collection);
+        return this;
+      }
+    });
+    collection.model = Model;
+    collection.create({prop: 'value'});
   });
 
 })();

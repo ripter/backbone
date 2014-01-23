@@ -1,19 +1,7 @@
 (function() {
 
-  var sync = Backbone.sync || function(method, model, options) {
-    var result = {}
-      ;
-    if (method === 'patch') {
-      result.data = JSON.stringify(options.attrs);
-    } else {
-      result.data = JSON.stringify(model.toJSON());
-    }
-    Backbone.ajax(result);
-  };
-  var ajax = Backbone.ajax || function() {
-    debugger;
-    return Backbone.$.ajax.apply(Backbone.$, arguments);
-  };
+  var sync = Backbone.sync;
+  var ajax = Backbone.ajax;
   var emulateHTTP = Backbone.emulateHTTP;
   var emulateJSON = Backbone.emulateJSON;
   var history = window.history;

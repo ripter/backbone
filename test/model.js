@@ -399,16 +399,6 @@
     equal(changed, 0);
   });
 
-  test("save within change event", 1, function () {
-    var env = this;
-    var model = new Backbone.Model({firstName : "Taylor", lastName: "Swift"});
-    model.url = '/test';
-    model.on('change', function () {
-      model.save();
-      ok(_.isEqual(env.syncArgs.model, model));
-    });
-    model.set({lastName: 'Hicks'});
-  });
 
   test("validate after save", 2, function() {
     var lastError, model = new Backbone.Model();
@@ -427,11 +417,6 @@
     equal(model.validationError, "Can't change admin status.");
   });
 
-  test("save", 2, function() {
-    doc.save({title : "Henry V"});
-    equal(this.syncArgs.method, 'update');
-    ok(_.isEqual(this.syncArgs.model, doc));
-  });
 
   test("save, fetch, destroy triggers error event when an error occurs", 3, function () {
     var model = new Backbone.Model();
@@ -446,19 +431,6 @@
     model.destroy();
   });
 
-  test("save with PATCH", function() {
-    doc.clear().set({id: 1, a: 1, b: 2, c: 3, d: 4});
-    doc.save();
-    equal(this.syncArgs.method, 'update');
-    equal(this.syncArgs.options.attrs, undefined);
-
-    doc.save({b: 2, d: 4}, {patch: true});
-    equal(this.syncArgs.method, 'patch');
-    equal(_.size(this.syncArgs.options.attrs), 2);
-    equal(this.syncArgs.options.attrs.d, 4);
-    equal(this.syncArgs.options.attrs.a, undefined);
-    equal(this.ajaxSettings.data, "{\"b\":2,\"d\":4}");
-  });
 
   test("save in positional style", 1, function() {
     var model = new Backbone.Model();
@@ -482,20 +454,7 @@
     });
   });
 
-  test("fetch", 2, function() {
-    doc.fetch();
-    equal(this.syncArgs.method, 'read');
-    ok(_.isEqual(this.syncArgs.model, doc));
-  });
 
-  test("destroy", 3, function() {
-    doc.destroy();
-    equal(this.syncArgs.method, 'delete');
-    ok(_.isEqual(this.syncArgs.model, doc));
-
-    var newModel = new Backbone.Model;
-    equal(newModel.destroy(), false);
-  });
 
   test("non-persisted destroy", 1, function() {
     var a = new Backbone.Model({ 'foo': 1, 'bar': 2, 'baz': 3});
@@ -703,12 +662,6 @@
     ok(!model.hasChanged());
   });
 
-  test("save with `wait` succeeds without `validate`", 1, function() {
-    var model = new Backbone.Model();
-    model.url = '/test';
-    model.save({x: 1}, {wait: true});
-    ok(this.syncArgs.model === model);
-  });
 
   test("save without `wait` doesn't set invalid attributes", function () {
     var model = new Backbone.Model();
@@ -740,27 +693,6 @@
     equal(model.previous(''), true);
   });
 
-  test("`save` with `wait` sends correct attributes", 5, function() {
-    var changed = 0;
-    var model = new Backbone.Model({x: 1, y: 2});
-    model.url = '/test';
-    model.on('change:x', function() { changed++; });
-    model.save({x: 3}, {wait: true});
-    deepEqual(JSON.parse(this.ajaxSettings.data), {x: 3, y: 2});
-    equal(model.get('x'), 1);
-    equal(changed, 0);
-    this.syncArgs.options.success({});
-    equal(model.get('x'), 3);
-    equal(changed, 1);
-  });
-
-  test("a failed `save` with `wait` doesn't leave attributes behind", 1, function() {
-    var model = new Backbone.Model;
-    model.url = '/test';
-    model.save({x: 1}, {wait: true});
-    equal(model.get('x'), void 0);
-  });
-
   test("#1030 - `save` with `wait` results in correct attributes if success is called during sync", 2, function() {
     var model = new Backbone.Model({x: 1, y: 2});
     model.sync = function(method, model, options) {
@@ -771,12 +703,6 @@
     equal(model.get('x'), 3);
   });
 
-  test("save with wait validates attributes", function() {
-    var model = new Backbone.Model();
-    model.url = '/test';
-    model.validate = function() { ok(true); };
-    model.save({x: 1}, {wait: true});
-  });
 
   test("save turns on parse flag", function () {
     var Model = Backbone.Model.extend({
@@ -1092,17 +1018,6 @@
     equal(model.validationError, "This shouldn't happen");
   });
 
-  test("toJSON receives attrs during save(..., {wait: true})", 1, function() {
-    var Model = Backbone.Model.extend({
-      url: '/test',
-      toJSON: function() {
-        strictEqual(this.attributes.x, 1);
-        return _.clone(this.attributes);
-      }
-    });
-    var model = new Model;
-    model.save({x: 1}, {wait: true});
-  });
 
   test("#2034 - nested set with silent only triggers one change", 1, function() {
     var model = new Backbone.Model();
