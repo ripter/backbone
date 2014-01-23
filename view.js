@@ -165,6 +165,5 @@
   });
 
   Backbone.View.extend = extend;
-  Backbone.Events = Events;
   return Backbone;
 }));

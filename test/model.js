@@ -1,10 +1,13 @@
 (function() {
 
   var proxy = Backbone.Model.extend();
-  var klass = Backbone.Collection.extend({
-    url : function() { return '/collection'; }
-  });
-  var doc, collection;
+  var klass, doc, collection;
+  // Only test Collection if we have one
+  if (typeof Backbone.Collection !== 'undefined') {
+    klass = Backbone.Collection.extend({
+      url : function() { return '/collection'; }
+    });
+  }
 
   module("Backbone.Model", {
 
@@ -15,13 +18,27 @@
         author : "Bill Shakespeare",
         length : 123
       });
-      collection = new klass();
-      collection.add(doc);
+
+      if (klass) {
+        collection = new klass();
+        collection.add(doc);
+      }
     }
 
   });
 
-  test("initialize", 3, function() {
+  test("initialize without Collection", function() {
+    var Model = Backbone.Model.extend({
+      initialize: function() {
+        this.one = 1;
+      }
+    });
+    var model = new Model({}, {});
+    equal(model.one, 1);
+  });
+
+  test("initialize with Collection", function() {
+    if (!klass) { ok(true, 'No Backbone.Collection, skipping'); return; }
     var Model = Backbone.Model.extend({
       initialize: function() {
         this.one = 1;
@@ -77,7 +94,11 @@
     equal(JSON.stringify(model.toJSON()), "{}");
   });
 
-  test("url", 3, function() {
+  test("url", function() {
+    if (!klass) {
+      ok(true, 'Collection not defined, skipping test');
+      return;
+    }
     doc.urlRoot = null;
     equal(doc.url(), '/collection/1-the-tempest');
     doc.collection.url = '/collection/';

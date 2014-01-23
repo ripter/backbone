@@ -201,6 +201,7 @@
 
   // Helpers
   // -------
+  Backbone.Helpers = {};
 
   // Helper function to correctly set up the prototype chain, for subclasses.
   // Similar to `goog.inherits`, but uses a hash of prototype properties and
@@ -238,6 +239,22 @@
     return child;
   };
   Backbone._extend = extend;
+
+  // Throw an error when a URL is needed, and none is supplied.
+  var urlError = function() {
+    throw new Error('A "url" property or function must be specified');
+  };
+  Backbone._urlError = urlError;
+
+  // Wrap an optional error callback with a fallback error event.
+  var wrapError = function(model, options) {
+    var error = options.error;
+    options.error = function(resp) {
+      if (error) error(model, resp, options);
+      model.trigger('error', model, resp, options);
+    };
+  };
+  Backbone._wrapError = wrapError;
 
   return Backbone;
 }));
