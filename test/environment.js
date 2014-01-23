@@ -3,7 +3,6 @@
   var sync = Backbone.sync || function(method, model, options) {
     var result = {}
       ;
-
     if (method === 'patch') {
       result.data = JSON.stringify(options.attrs);
     } else {
@@ -11,7 +10,10 @@
     }
     Backbone.ajax(result);
   };
-  var ajax = Backbone.ajax;
+  var ajax = Backbone.ajax || function() {
+    debugger;
+    return Backbone.$.ajax.apply(Backbone.$, arguments);
+  };
   var emulateHTTP = Backbone.emulateHTTP;
   var emulateJSON = Backbone.emulateJSON;
   var history = window.history;

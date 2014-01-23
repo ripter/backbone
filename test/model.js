@@ -1,13 +1,7 @@
 (function() {
 
   var proxy = Backbone.Model.extend();
-  var klass, doc, collection;
-  // Only test Collection if we have one
-  if (typeof Backbone.Collection !== 'undefined') {
-    klass = Backbone.Collection.extend({
-      url : function() { return '/collection'; }
-    });
-  }
+  var doc;
 
   module("Backbone.Model", {
 
@@ -19,10 +13,6 @@
         length : 123
       });
 
-      if (klass) {
-        collection = new klass();
-        collection.add(doc);
-      }
     }
 
   });
@@ -37,18 +27,6 @@
     equal(model.one, 1);
   });
 
-  test("initialize with Collection", function() {
-    if (!klass) { ok(true, 'No Backbone.Collection, skipping'); return; }
-    var Model = Backbone.Model.extend({
-      initialize: function() {
-        this.one = 1;
-        equal(this.collection, collection);
-      }
-    });
-    var model = new Model({}, {collection: collection});
-    equal(model.one, 1);
-    equal(model.collection, collection);
-  });
 
   test("initialize with attributes and options", 1, function() {
     var Model = Backbone.Model.extend({
@@ -94,19 +72,6 @@
     equal(JSON.stringify(model.toJSON()), "{}");
   });
 
-  test("url", function() {
-    if (!klass) {
-      ok(true, 'Collection not defined, skipping test');
-      return;
-    }
-    doc.urlRoot = null;
-    equal(doc.url(), '/collection/1-the-tempest');
-    doc.collection.url = '/collection/';
-    equal(doc.url(), '/collection/1-the-tempest');
-    doc.collection = null;
-    raises(function() { doc.url(); });
-    doc.collection = collection;
-  });
 
   test("url when using urlRoot, and uri encoding", 2, function() {
     var Model = Backbone.Model.extend({

@@ -274,29 +274,6 @@
     ok(new View().$el.is('p'));
   });
 
-  test("views stopListening", function() {
-    if (typeof Backbone.Model === 'undefined'
-        || typeof Backbone.Collection === 'undefined') {
-      ok(true, 'Model or Collection not included, skipping');
-      return;
-    }
-
-    var View = Backbone.View.extend({
-      initialize: function() {
-        this.listenTo(this.model, 'all x', function(){ ok(false); }, this);
-        this.listenTo(this.collection, 'all x', function(){ ok(false); }, this);
-      }
-    });
-
-    var view = new View({
-      model: new Backbone.Model,
-      collection: new Backbone.Collection
-    });
-
-    view.stopListening();
-    view.model.trigger('x');
-    view.collection.trigger('x');
-  });
 
   test("Provide function for el.", 2, function() {
     var View = Backbone.View.extend({
