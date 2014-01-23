@@ -1,4 +1,3 @@
-
 /*global Backbone, module, test, ok */
 (function() {
 
