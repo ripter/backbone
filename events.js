@@ -22,6 +22,10 @@
 
 }(this, function(root, Backbone, _, $) {
 
+  // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
+  // the `$` variable.
+  Backbone.$ = $;
+
   // Create local references to array methods we'll want to use later.
   var array = [];
   var push = array.push;

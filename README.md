@@ -10,7 +10,21 @@
     (_'_______________________________________________________________________________'_)
     (_.———————————————————————————————————————————————————————————————————————————————._)
 
+#Fork
+The goal ofthis fork is to break Backbone into modules. That way you can include just the parts of Backbone that are relevant to your project.
 
+Love Backbone.View but have your own Models? This fork will let you do that.
+
+###Example:
+If you just need Backbone.View
+
+    <script src="events.js"></script>
+    <script src="view.js"></script>
+		
+(Events is required for all modules)
+
+
+#Backbone
 Backbone supplies structure to JavaScript-heavy applications by providing models key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.
 
 For Docs, License, Tests, pre-packed downloads, and everything else, really, see:

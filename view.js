@@ -28,10 +28,6 @@
   var Events = Backbone.Events;
   var extend = Backbone._extend;
 
-  // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
-  // the `$` variable.
-  Backbone.$ = $;
-
 
   // Backbone.View
   // -------------
