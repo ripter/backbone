@@ -2,10 +2,10 @@
 <html>
 <head>
   <title>Backbone Test Suite</title>
-  <link rel="stylesheet" href="vendor/qunit.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="vendor/json2.js"></script>
-  <script type="text/javascript" src="vendor/qunit.js"></script>
-  <script type="text/javascript" src="vendor/require.js"></script>
+  <link rel="stylesheet" href="../vendor/qunit.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="../vendor/json2.js"></script>
+  <script type="text/javascript" src="../vendor/qunit.js"></script>
+  <script type="text/javascript" src="../vendor/require.js"></script>
   <script>
     // Tests are loaded async, so wait for them
     // to load before starting.
@@ -13,9 +13,10 @@
 
     require.config({
       paths: {
-        'jquery': 'vendor/jquery',
-        'underscore': 'vendor/underscore',
-        'backboneEvents': '../events'
+        jquery: '../vendor/jquery',
+        underscore: '../vendor/underscore',
+		    events: '../../events',
+        router: '../../router'
       },
       shim: {
         'underscore': {
@@ -26,11 +27,12 @@
 
     var root = this;
 
-    require(['backboneEvents'], function(Backbone) {
+    require(['router'], function(Backbone) {
       require([
-        'environment',
-        //'noconflict',
-        'events'
+        '../environment',
+        '../eventsModule',
+        '../events',
+		    '../router'
       ], function() {
         QUnit.start();
       });

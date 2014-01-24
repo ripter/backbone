@@ -3,10 +3,10 @@
 
   // Set up Backbone appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
-    define(['underscore', 'jquery', 'exports'], function(_, $, exports) {
+    define(['underscore', 'jquery', 'events'], function(_, $, Backbone) {
       // Export global even in AMD case in case this script is loaded with
       // others that may still expect a global Backbone.
-      root.Backbone = factory(root, exports, _, $);
+      return root.Backbone = factory(root, Backbone, _, $);
     });
 
   // Next for Node.js or CommonJS. jQuery may not be needed as a module.
