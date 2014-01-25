@@ -3,7 +3,7 @@
 
   // Set up Backbone appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
-    define(['underscore', 'jquery', 'events'], function(_, $, Backbone) {
+    define(['underscore', 'jquery', '/events.js'], function(_, $, Backbone) {
       // Export global even in AMD case in case this script is loaded with
       // others that may still expect a global Backbone.
       return root.Backbone = factory(root, Backbone, _, $);
