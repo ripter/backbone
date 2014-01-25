@@ -1,7 +1,7 @@
 ({
   baseUrl: './'
-  , name: 'collection'
-  , out: 'dist/backboneCollection.js'
+  , name: 'router'
+  , out: 'dist/backboneRouter.js'
   , paths: {
     jquery: 'empty:'
     , underscore: 'empty:'
